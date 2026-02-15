@@ -3,7 +3,13 @@ from bs4 import BeautifulSoup
 import json
 import os
 import time
+from geopy.geocoders import Nominatim
+from geopy.distance import geodesic
 
+DCU_coordinates = (53.38569455370613, -6.258966096623697)
+UCD_coordinates = (53.30982292759559, -6.221074718690762)
+
+geolocator = Nominatim(user_agent="rentAlertProgram")
 
 DATA_FILE = "data.json"
 
@@ -27,16 +33,16 @@ def send_telegram(message):
     requests.post(url, data=payload)
 
 
-
 def process_listing(listing):
     try:
         title = listing.find("h2", {"class": "card-title"}).text.strip()
+        address = listing.find("h3", {"class": "card-text"}).text.strip()
         link = "https://www.myhome.ie" + listing.find("a")["href"]
     except:
         return
 
     if any(item["link"] == link for item in known_listings):
-        return  # already seen
+        return
 
     record = {
         "title": title,
@@ -46,7 +52,16 @@ def process_listing(listing):
     known_listings.append(record)
     save_data()
 
-    message = f"New listing found:\n{title}\n{link}"
+    location = geolocator.geocode(address)
+
+    if location != None:
+        distance_to_DCU = round(geodesic(DCU_coordinates, (location.latitude, location.longitude)).km, 2)
+        distance_to_UCD = round(geodesic(UCD_coordinates, (location.latitude, location.longitude)).km, 2)
+    else:
+        distance_to_DCU = 'Failed to calculate distance to DCU'
+        distance_to_UCD = 'Failed to calculate distance to UCD'
+
+    message = f"New listing found:\n{title}\nDistance to DCU: {distance_to_DCU}km\nDistance to UCD: {distance_to_UCD}km\n{address}\n{link}"
     send_telegram(message)
     print("Sent Telegram:", title)
 
