@@ -55,13 +55,13 @@ def process_listing(listing):
     location = geolocator.geocode(address)
 
     if location != None:
-        distance_to_DCU = round(geodesic(DCU_coordinates, (location.latitude, location.longitude)).km, 2)
-        distance_to_UCD = round(geodesic(UCD_coordinates, (location.latitude, location.longitude)).km, 2)
+        distance_to_DCU = str(round(geodesic(DCU_coordinates, (location.latitude, location.longitude)).km, 2)) + 'km'
+        distance_to_UCD = str(round(geodesic(UCD_coordinates, (location.latitude, location.longitude)).km, 2)) + 'km'
     else:
         distance_to_DCU = 'Failed to calculate distance to DCU'
         distance_to_UCD = 'Failed to calculate distance to UCD'
 
-    message = f"New listing found:\n{title}\nDistance to DCU: {distance_to_DCU}km\nDistance to UCD: {distance_to_UCD}km\n{address}\n{link}"
+    message = f"New listing found:\n{title}\nDistance to DCU: {distance_to_DCU}\nDistance to UCD: {distance_to_UCD}\n{address}\n{link}"
     send_telegram(message)
     print("Sent Telegram:", title)
 
