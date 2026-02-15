@@ -25,4 +25,4 @@ jobs:
 
       - name: Run program
         run: |
-          python address.py
+          python myHome.py
