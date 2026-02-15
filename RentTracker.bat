@@ -1,0 +1,1 @@
+"C:\Python314\python.exe" "C:\Users\frida\Documents\Rent Program\RentAlert\myHome.py"
