@@ -39,5 +39,3 @@ jobs:
           git add data.json
           git commit -m "Update data.json" || echo "No changes to commit"
           git push
-
-
