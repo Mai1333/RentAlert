@@ -6,6 +6,8 @@ import time
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 
+new_listings_found = False
+
 DCU_coordinates = (53.38569455370613, -6.258966096623697)
 UCD_coordinates = (53.30982292759559, -6.221074718690762)
 
@@ -52,6 +54,9 @@ def process_listing(listing):
     known_listings.append(record)
     save_data()
 
+    global new_listings_found
+    new_listings_found = True
+
     location = geolocator.geocode(address)
 
     if location != None:
@@ -88,3 +93,7 @@ def scrape():
 
 
 scrape()
+
+if not new_listings_found:
+    send_telegram("Program ran successfully, but no new listings were found.")
+
