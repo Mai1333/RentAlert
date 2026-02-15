@@ -24,5 +24,15 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run program
+        run: python myHome.py
+
+      - name: Commit updated data.json
         run: |
-          python myHome.py
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add data.json
+          git commit -m "Update data.json" || echo "No changes to commit"
+          git push
+
+          
+
