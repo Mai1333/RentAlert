@@ -74,7 +74,7 @@ def process_listing(listing):
 def scrape():
     page = 1
     while True:
-        url = f"https://www.myhome.ie/rentals/dublin/property-to-rent?page={page}&maxprice=2200&minbeds=2&maxbeds=2"
+        url = f"https://www.myhome.ie/rentals/dublin/property-to-rent?page={page}&maxprice=5000&minbeds=2&maxbeds=2"
         print("Scraping:", url)
 
         response = requests.get(url)
