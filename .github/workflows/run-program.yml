@@ -2,13 +2,14 @@ name: Run Rent Program
 
 on:
   push:
+    branches:
+      - main
   schedule:
     - cron: "0 * * * *"
-  workflow_dispatch:
+  workflow_dispatch:    
 
 permissions:
   contents: write
-
 
 jobs:
   run-script:
@@ -30,12 +31,20 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run program
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
         run: python myHome.py
 
       - name: Commit updated data.json
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add data.json
-          git commit -m "Update data.json" || echo "No changes to commit"
-          git push
+          # We check if there are changes so the action doesn't fail if no new houses were found
+          if git diff --staged --quiet; then
+            echo "No changes to data.json"
+          else
+            git commit -m "Update seen listings data"
+            git push
+          fi
