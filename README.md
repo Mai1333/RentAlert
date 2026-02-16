@@ -1,4 +1,4 @@
-# Dublin Rental Alert Bot 🏠🇮🇪
+# Dublin Rental Alert Bot
 
 **An automated Python tool that monitors MyHome.ie for rental listings matching student budget criteria and sends instant alerts via Telegram.**
 
@@ -50,5 +50,6 @@ CHAT_ID=your_chat_id_here
 
 4. **Run the script**
 python main.py
+
 
 
